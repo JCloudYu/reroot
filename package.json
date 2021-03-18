@@ -1,0 +1,22 @@
+{
+	"name": "reroot",
+	"version": "1.0.0",
+	"description": "A tiny module that helps developers to limit require path to specific directory",
+	"main": "reroot.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/JCloudYu/reroot.git"
+	},
+	"keywords": [
+		"Require"
+	],
+	"author": "JCloudYu",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/JCloudYu/reroot/issues"
+	},
+	"homepage": "https://github.com/JCloudYu/reroot#readme"
+}
