@@ -5,11 +5,39 @@
 (()=>{
 	"use strict";
 	
+	const fs = require('fs');
 	const path = require('path');
 	const RUNTIME_DATA = {
 		proto_require: module.constructor.prototype.require,
 		root_dir: require.main.path
 	};
+	
+	// Look for the directory that contains node_modules
+	{
+		let search_dir = __dirname, node_modules_dir = false;
+		while(true) {
+			const curr_dir = `${search_dir}/node_modules`;
+			try {
+				const stat = fs.statSync(curr_dir);
+				if ( stat.isDirectory() ) {
+					node_modules_dir = search_dir;
+					break;
+				}
+			}
+			catch(e) {}
+			
+			
+			
+			const parent_dir = path.dirname(search_dir);
+			if ( parent_dir === search_dir ) break;
+			
+			search_dir = parent_dir;
+		}
+		
+		
+		RUNTIME_DATA.root_dir = node_modules_dir||require.main.path;
+	}
+	
 	
 	
 	Object.defineProperty(module.exports, 'root_path', {
