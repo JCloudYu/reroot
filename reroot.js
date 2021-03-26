@@ -47,6 +47,36 @@
 		get: ()=>{ return RUNTIME_DATA.root_dir; },
 		configurable:false, enumerable:true
 	});
+	Object.defineProperty(module.exports, 'safe_require', {
+		configurable:false, enumerable:false, writable:false,
+		value:(ori_require)=>function(...args){ try{return ori_require(...args);}catch(e){return undefined;}}
+	});
+	Object.defineProperty(module.exports, 'resolve_path', {
+		configurable:false, enumerable:false, writable:false,
+		value:function(src_path) {
+			const root_dir = RUNTIME_DATA.root_dir;
+		
+			const matches = src_path.match(file_uri_syntax);
+			if ( matches ) {
+				return path.resolve(root_dir, `${matches[1]?matches[1].substring(1):''}${matches[2]}`);
+			}
+			
+			
+			
+			let resolved_path = src_path;
+			if ( src_path[0] === "/" ) {
+				resolved_path = path.resolve(root_dir, src_path.substring(1));
+			}
+			else
+			if ( src_path.substring(0, 2) === "./" || src_path.substring(0, 3) === '../' ) {
+				resolved_path = path.resolve(root_dir, src_path);
+			}
+			
+			
+			
+			return resolved_path;
+		}
+	});
 	
 	
 	
@@ -74,7 +104,7 @@
 		else {
 			const matches = id.match(file_uri_syntax);
 			if ( matches ) {
-				id = `${matches[1]?matches[1].substring(1):''}${matches[2]}`;
+				id = path.resolve(this.path, `${matches[1]?matches[1].substring(1):''}${matches[2]}`);
 			}
 		}
 		
