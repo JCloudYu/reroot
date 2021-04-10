@@ -49,7 +49,13 @@
 	});
 	Object.defineProperty(module.exports, 'safe_require', {
 		configurable:false, enumerable:false, writable:false,
-		value:(ori_require)=>function(...args){ try{return ori_require(...args);}catch(e){return undefined;}}
+		value:(ori_require)=>function(...args){ try{return ori_require(...args);}catch(e){
+			if ( e instanceof Error && e.code === "ENOENT" ) {
+				return undefined;
+			}
+			
+			throw e;
+		}}
 	});
 	Object.defineProperty(module.exports, 'resolve_path', {
 		configurable:false, enumerable:false, writable:false,
