@@ -9,7 +9,7 @@
 	const path = require('path');
 	const RUNTIME_DATA = {
 		proto_require: module.constructor.prototype.require,
-		root_dir: require.main.path
+		root_dir: require.main?require.main.path:process.cwd()
 	};
 	
 	// Look for the directory that contains node_modules
