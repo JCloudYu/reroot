@@ -101,8 +101,17 @@
 		
 		
 		if ( resolved_path !== null ) {
-			if ( resolved_path.substring(0, root_dir.length) !== root_dir ) {
-				throw new Error("You're not allowed to access outer scope with relative path!");
+			let in_safe_zone = false;
+
+			const safe_paths = [root_dir, ...this.paths];
+			for( const path of safe_paths ) {
+				if ( resolved_path.substring(0, path.length) === path ) {
+					in_safe_zone = in_safe_zone || true;
+				}
+			}
+			
+			if ( in_safe_zone ) {
+				throw new Error("You're accessing path that is out of current environment's scope!");
 			}
 			
 			id = resolved_path;
