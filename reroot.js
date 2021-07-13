@@ -110,7 +110,7 @@
 				}
 			}
 			
-			if ( in_safe_zone ) {
+			if ( !in_safe_zone ) {
 				throw new Error("You're accessing path that is out of current environment's scope!");
 			}
 			
