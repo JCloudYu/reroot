@@ -1,6 +1,6 @@
 {
 	"name": "reroot",
-	"version": "1.3.2",
+	"version": "1.4.0",
 	"description": "A tiny module that helps developers to limit require path to specific directory",
 	"main": "reroot.js",
 	"scripts": {
@@ -18,5 +18,8 @@
 	"bugs": {
 		"url": "https://github.com/JCloudYu/reroot/issues"
 	},
-	"homepage": "https://github.com/JCloudYu/reroot#readme"
+	"homepage": "https://github.com/JCloudYu/reroot#readme",
+	"devDependencies": {
+		"@types/node": "^16.4.13"
+	}
 }
