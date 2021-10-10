@@ -9,7 +9,9 @@
 	const path = require('path');
 	const RUNTIME_DATA = {
 		proto_require: module.constructor.prototype.require,
-		root_dir: require.main?require.main.path:process.cwd()
+		proj_root: require.main?require.main.path:process.cwd(),
+		user_root: '',
+		search_root: ''
 	};
 	
 	// Look for the directory that contains node_modules
@@ -34,17 +36,27 @@
 			search_dir = parent_dir;
 		}
 		
-		
-		RUNTIME_DATA.root_dir = node_modules_dir||require.main.path;
+		RUNTIME_DATA.proj_root = node_modules_dir||RUNTIME_DATA.proj_root;
 	}
 	
 	
 	
+	RUNTIME_DATA.search_root = RUNTIME_DATA.user_root||RUNTIME_DATA.proj_root;
 	Object.defineProperty(module.exports, 'root_path', {
+		set:(v)=>module.exports.search_root=v,
+		get: ()=>module.exports.search_root,
+		configurable:false, enumerable:true
+	});
+	Object.defineProperty(module.exports, 'search_root', {
 		set:(v)=>{
-			RUNTIME_DATA.root_dir = path.resolve(process.cwd(), v);
+			RUNTIME_DATA.user_root = path.resolve(process.cwd(), '' + v);
+			RUNTIME_DATA.search_root = RUNTIME_DATA.user_root||RUNTIME_DATA.proj_root;
 		},
-		get: ()=>{ return RUNTIME_DATA.root_dir; },
+		get: ()=>RUNTIME_DATA.search_root,
+		configurable:false, enumerable:true
+	});
+	Object.defineProperty(module.exports, 'project_root', {
+		get: ()=>RUNTIME_DATA.proj_root,
 		configurable:false, enumerable:true
 	});
 	Object.defineProperty(module.exports, 'safe_require', {
@@ -60,7 +72,7 @@
 	Object.defineProperty(module.exports, 'resolve_path', {
 		configurable:false, enumerable:false, writable:false,
 		value:function(src_path) {
-			const root_dir = RUNTIME_DATA.root_dir;
+			const root_dir = RUNTIME_DATA.search_root;
 		
 			const matches = src_path.match(file_uri_syntax);
 			if ( matches ) {
@@ -88,7 +100,7 @@
 	
 	const file_uri_syntax = /^file:\/\/(\/[a-zA-Z]:)?(\/.*)$/;
 	module.constructor.prototype.require = function(id) {
-		const root_dir = RUNTIME_DATA.root_dir;
+		const root_dir = RUNTIME_DATA.search_root;
 		
 		let resolved_path = null;
 		if ( id[0] === "/" ) {
