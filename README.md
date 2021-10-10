@@ -8,8 +8,11 @@ npm install reroot
 
 ## Usage ##
 ```javascript
-// entry module
-require('reroot').root_path = "/PATH/YOU/WANT/ALL/MODULES/START";
+// Where the cloest node_modules is
+require('reroot').project_root;
+
+// Assign where does the root '/' start from
+require('reroot').search_root = "/PATH/YOU/WANT/ALL/MODULES/START";
 
 // other module
 require('/a/b/c'); // This will be resolved into "/PATH/YOU/WANT/ALL/MODULES/START/a/b/c"
