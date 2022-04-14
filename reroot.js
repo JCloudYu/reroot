@@ -62,7 +62,7 @@
 	Object.defineProperty(module.exports, 'safe_require', {
 		configurable:false, enumerable:false, writable:false,
 		value:(ori_require)=>function(...args){ try{return ori_require(...args);}catch(e){
-			if ( e instanceof Error && (e.code === "ENOENT" || e.code === "MODULE_NOT_FOUND")) {
+			if ( e instanceof Error && (e.code === "MODULE_NOT_FOUND")) {
 				return undefined;
 			}
 			
