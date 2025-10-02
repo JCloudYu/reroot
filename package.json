@@ -1,6 +1,6 @@
 {
 	"name": "reroot",
-	"version": "1.5.1",
+	"version": "1.5.2",
 	"description": "A tiny module that helps developers to limit require path to specific directory",
 	"main": "reroot.js",
 	"scripts": {

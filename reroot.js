@@ -14,28 +14,23 @@
 		search_root: ''
 	};
 	
-	// Look for the directory that contains node_modules
+	// Look for the directory that contains node_modules and package.json
 	{
-		let search_dir = __dirname, node_modules_dir = false;
+		let currentDir = __dirname, node_modules_dir = false;
 		while(true) {
-			const curr_dir = `${search_dir}/node_modules`;
-			try {
-				const stat = fs.statSync(curr_dir);
-				if ( stat.isDirectory() ) {
-					node_modules_dir = search_dir;
-					break;
-				}
+			const pkgPath = path.join(currentDir, 'package.json');
+			const node_modulesPath = path.join(currentDir, 'node_modules');
+			if (fs.existsSync(pkgPath) && fs.existsSync(node_modulesPath)) {
+				node_modules_dir = currentDir;
+				break;
 			}
-			catch(e) {}
+
+			const parentDir = path.dirname(currentDir);
+			if (parentDir === currentDir) break;
 			
-			
-			
-			const parent_dir = path.dirname(search_dir);
-			if ( parent_dir === search_dir ) break;
-			
-			search_dir = parent_dir;
+			currentDir = parentDir;
 		}
-		
+
 		RUNTIME_DATA.proj_root = node_modules_dir||RUNTIME_DATA.proj_root;
 	}
 	
